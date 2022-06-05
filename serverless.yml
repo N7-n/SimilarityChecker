@@ -1,18 +1,14 @@
 service: n7QandA
  
-frameworkVersion: '2'
+frameworkVersion: "3"
  
 provider:
   name: aws
   runtime: python3.7
   stage: dev
   region: ap-northeast-1
-  timeout: 29 
- 
-custom:
-  env: ${file(./config/env.yml)}
+  timeout: 29
  
 functions:
   parse:
-    image: "${self:custom.env.accountID}.dkr.ecr.${self:custom.env.region}.amazonaws.com/\
-      ${self:custom.env.repository}@${self:custom.env.digest}"
+    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7learn-container@sha256:4f89404b1c5cc846d609b76dbb859ee98391eb5d0d07f9aee869db39417ca7bd
