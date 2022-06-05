@@ -1,10 +1,21 @@
 import json
 import boto3
+import MeCab
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.svm import SVC
+from sklearn.preprocessing import LabelEncoder
+import dill 
 
 s3 = boto3.resource("s3")
+# MeCabの初期化
+mecab = MeCab.Tagger()
+mecab.parse('')
 
+sents = []
+labels = []
 
 def lambda_handler(event, context):
+
 
     s3_record = event["Records"][0]["s3"]
     inputKey = s3_record["object"]["key"]
@@ -13,11 +24,44 @@ def lambda_handler(event, context):
     object = s3.Object(inputBucket, inputKey)
     body = object.get()["Body"].read()
 
+    bodyList =  body.splitlines()
+
+    for line in bodyList:
+        line = line.rstrip()
+        da, utt = line.split('\t')
+        words = []
+        for line in mecab.parse(utt).splitlines():
+            if line == "EOS":
+                break
+            else:
+                word, feature_str = line.split("\t")
+                words.append(word)
+        sents.append(" ".join(words))
+        labels.append(da)
+
+    # TfidfVectorizerを用いて，各文をベクトルに変換
+    vectorizer = TfidfVectorizer(tokenizer=lambda x:x.split(), ngram_range=(1,3))
+    X = vectorizer.fit_transform(sents)
+
+    #    LabelEncoderを用いて，ラベルを数値に変換
+    label_encoder = LabelEncoder()
+    Y = label_encoder.fit_transform(labels)
+
+    # SVMでベクトルからラベルを取得するモデルを学習
+    svc = SVC(gamma="scale")
+    svc.fit(X,Y)
+
+    # 学習されたモデル等一式を svc.modelに保存
+    with open("svc.model","wb") as f:
+        dill.dump(vectorizer, f)
+        dill.dump(label_encoder, f)
+        dill.dump(svc, f)
+
     #アウトプット用のkey作成
     count = inputKey.find("/")
     output_keyName = "learn" + inputKey[count:]
 
     #S3に書き出し
     bucket = s3.Bucket(inputBucket)
-    obj = bucket.Object(output_keyName)
-    obj.put(Body=body)
+    with svc.model.open('rb') as f:
+        bucket.upload_fileobj(f, output_keyName)
