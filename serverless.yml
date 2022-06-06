@@ -4,18 +4,14 @@ frameworkVersion: "3"
 provider:
   name: aws
   runtime: python3.7
-  stage: dev
   region: ap-northeast-1
   timeout: 29
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - logs:CreateLogStream
-        - logs:PutLogEvents
-        - "s3:GetObject"
-        - "s3:PutObject"
+  iamRoleStatements: 
+    - Effect: Allow 
+      Action: 
+        - s3:* 
       Resource:
-      	- "arn:aws:s3:::allow-s3-role/*"
+        - "*"
 
 functions:
   parse:
