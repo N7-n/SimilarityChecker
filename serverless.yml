@@ -15,7 +15,7 @@ provider:
         - "s3:GetObject"
         - "s3:PutObject"
       Resource:
-	      - "arn:aws:s3:::allow-s3-role/*"
+      	- "arn:aws:s3:::allow-s3-role/*"
 
 functions:
   parse:
