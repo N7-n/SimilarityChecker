@@ -5,7 +5,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import SVC
 from sklearn.preprocessing import LabelEncoder
 import dill 
-import subprocess
 
 s3 = boto3.resource("s3")
 # MeCabの初期化
