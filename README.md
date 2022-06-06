@@ -1,6 +1,6 @@
 # N7Q-Achatbot とは
 # 使用技術
-* Python
+* Python3.7
 * AWS 
   * Lambda
   * S3
