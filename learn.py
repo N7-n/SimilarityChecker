@@ -26,7 +26,9 @@ def lambda_handler(event, context):
     object = s3.Object(inputBucket, inputKey)
     body = object.get()["Body"].read()
 
-    bodyList =  body.splitlines()
+    bodyList = body.splitlines()
+    #デコード
+    bodyList = bodyList.decode()
 
     for line in bodyList:
         line = line.rstrip()
