@@ -16,3 +16,10 @@ provider:
 functions:
   parse:
     image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7chat@sha256:1f063d01a6acb3111037c5d8f7663858835d0ce65a4d7beecd2ed59d8329bc86 
+    events:
+      - s3:
+          bucket: putlambdan7chat
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: text/
+            - suffix: .txt

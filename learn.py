@@ -1,7 +1,6 @@
 import json
 import boto3
 import MeCab
-import dill 
 import zipfile
 import os
 from pprint import pprint
