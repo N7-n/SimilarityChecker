@@ -15,7 +15,7 @@ provider:
 
 functions:
   parse:
-    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7chat@sha256:1e23a7963820f3e2d0ead8d7c1894a39bd6380327e3bd26ef2ac40bc603021a3 
+    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7chat@sha256:2e5b640edb5f8bd915c00a62a0f2f914aa581ec074f0383d75e5cc28189525bb 
     events:
       - s3:
           bucket: putlambdan7chat

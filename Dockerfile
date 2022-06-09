@@ -39,4 +39,5 @@ RUN pip install --upgrade pip && pip install -r /opt/requirement.txt
 # set function code
 WORKDIR /var/task
 COPY learn.py .
+COPY tmp/site-packages .
 CMD ["learn.lambda_handler"]
