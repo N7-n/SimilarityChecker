@@ -3,4 +3,4 @@
 AWSCLIV2.pkg
 .serverless
 *.zip
-node_models/
+node_modules/
