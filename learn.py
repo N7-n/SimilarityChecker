@@ -20,11 +20,6 @@ def lambda_handler(event, context):
     pprint(os.listdir("/tmp/site-packages/"))
     sys.path.append('/tmp/site-packages')
 
-
-
-
-
-
     s3_record = event["Records"][0]["s3"]
     inputKey = s3_record["object"]["key"]
     inputBucket = s3_record["bucket"]["name"]
