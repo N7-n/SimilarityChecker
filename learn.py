@@ -1,22 +1,29 @@
 import json
 import boto3
 import MeCab
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import SVC
-from sklearn.preprocessing import LabelEncoder
 import dill 
+import zipfile
+import os
+from pprint import pprint
+import sys
 
 s3 = boto3.resource("s3")
 # MeCabの初期化
 mecab = MeCab.Tagger()
 mecab.parse('')
 
+
 sents = []
 labels = []
 
-subprocess.run("pip install mecab-python3", shell=True)
-
 def lambda_handler(event, context):
+
+    pprint(os.listdir("/tmp/site-packages/"))
+    sys.path.append('/tmp/site-packages')
+
+
+
+
 
 
     s3_record = event["Records"][0]["s3"]
@@ -26,9 +33,11 @@ def lambda_handler(event, context):
     object = s3.Object(inputBucket, inputKey)
     body = object.get()["Body"].read()
 
-    bodyList = body.splitlines()
     #デコード
-    bodyList = bodyList.decode()
+    body = body.decode()
+
+    bodyList = body.splitlines()
+
 
     for line in bodyList:
         line = line.rstrip()

@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/python:3.7
+FROM public.ecr.aws/lambda/python:3.8
  
 # install build libs
 RUN yum groupinstall -y "Development Tools" \
@@ -35,7 +35,7 @@ RUN git clone --depth 1 https://github.com/neologd/mecab-ipadic-neologd.git \
 # setup python
 COPY ./requirement.txt /opt/
 RUN pip install --upgrade pip && pip install -r /opt/requirement.txt
- 
+
 # set function code
 WORKDIR /var/task
 COPY learn.py .

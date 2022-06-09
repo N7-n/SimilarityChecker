@@ -3,7 +3,7 @@ frameworkVersion: "3"
 
 provider:
   name: aws
-  runtime: python3.7
+  runtime: python3.8
   region: ap-northeast-1
   timeout: 29
   iamRoleStatements: 
@@ -15,4 +15,4 @@ provider:
 
 functions:
   parse:
-    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7learn-container@sha256:4f89404b1c5cc846d609b76dbb859ee98391eb5d0d07f9aee869db39417ca7bd
+    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7chat@sha256:1f063d01a6acb3111037c5d8f7663858835d0ce65a4d7beecd2ed59d8329bc86 
