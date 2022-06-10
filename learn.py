@@ -6,6 +6,7 @@ import os
 from pprint import pprint
 import sys
 
+
 s3 = boto3.resource("s3")
 # MeCabの初期化
 mecab = MeCab.Tagger()
@@ -16,9 +17,24 @@ sents = []
 labels = []
 
 def lambda_handler(event, context):
+    bucket = s3.Bucket("putlambdan7chat")
+    bucket.download_file("scipy.zip", '/tmp/scipy.zip')
+    bucket.download_file("numpy.zip", '/tmp/numpy.zip')
+    bucket.download_file("dill.zip", '/tmp/dill.zip')
+    bucket.download_file("sklearn.zip", '/tmp/sklearn.zip')
 
-    pprint(os.listdir("/tmp/site-packages/"))
-    sys.path.append('/tmp/site-packages')
+
+    zip_ref = zipfile.ZipFile('/tmp/scipy.zip', 'r')
+    zip_ref = zipfile.ZipFile('/tmp/numpy.zip', 'r')
+    zip_ref = zipfile.ZipFile('/tmp/dill.zip', 'r')
+    zip_ref = zipfile.ZipFile('/tmp/sklearn.zip', 'r')
+    zip_ref.extractall('/tmp')
+    zip_ref.close()
+    os.remove("/tmp/scipy.zip")
+    os.remove("/tmp/numnpy.zip")
+    os.remove("/tmp/dill.zip")
+    os.remove("/tmp/sklearn.zip")
+
 
     s3_record = event["Records"][0]["s3"]
     inputKey = s3_record["object"]["key"]

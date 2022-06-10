@@ -31,7 +31,9 @@ RUN git clone --depth 1 https://github.com/neologd/mecab-ipadic-neologd.git \
     && cd mecab-ipadic-neologd \
     && ./bin/install-mecab-ipadic-neologd -n -a -y \
     && rm -rf mecab-ipadic-neologd
- 
+
+
+
 # setup python
 COPY ./requirement.txt /opt/
 RUN pip install --upgrade pip && pip install -r /opt/requirement.txt
@@ -39,5 +41,5 @@ RUN pip install --upgrade pip && pip install -r /opt/requirement.txt
 # set function code
 WORKDIR /var/task
 COPY learn.py .
-COPY tmp/site-packages .
+
 CMD ["learn.lambda_handler"]
