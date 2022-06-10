@@ -1,10 +1,15 @@
 import json
 import boto3
 import MeCab
+import dill
 import zipfile
 import os
 from pprint import pprint
 import sys
+import io
+from sklearn.svm import SVC
+from sklearn.preprocessing import LabelEncoder
+from sklearn.feature_extraction.text import TfidfVectorizer 
 
 
 s3 = boto3.resource("s3")
@@ -17,23 +22,16 @@ sents = []
 labels = []
 
 def lambda_handler(event, context):
-    bucket = s3.Bucket("putlambdan7chat")
-    bucket.download_file("scipy.zip", '/tmp/scipy.zip')
-    bucket.download_file("numpy.zip", '/tmp/numpy.zip')
-    bucket.download_file("dill.zip", '/tmp/dill.zip')
-    bucket.download_file("sklearn.zip", '/tmp/sklearn.zip')
-
-
-    zip_ref = zipfile.ZipFile('/tmp/scipy.zip', 'r')
-    zip_ref = zipfile.ZipFile('/tmp/numpy.zip', 'r')
-    zip_ref = zipfile.ZipFile('/tmp/dill.zip', 'r')
-    zip_ref = zipfile.ZipFile('/tmp/sklearn.zip', 'r')
-    zip_ref.extractall('/tmp')
-    zip_ref.close()
-    os.remove("/tmp/scipy.zip")
-    os.remove("/tmp/numnpy.zip")
-    os.remove("/tmp/dill.zip")
-    os.remove("/tmp/sklearn.zip")
+#    zip_ref = zipfile.ZipFile('/tmp/scipy.zip', 'r')
+#   zip_ref = zipfile.ZipFile('/tmp/numpy.zip', 'r')
+#    zip_ref = zipfile.ZipFile('/tmp/dill.zip', 'r')
+#    zip_ref = zipfile.ZipFile('/tmp/sklearn.zip', 'r')
+#    zip_ref.extractall('/tmp')
+#    zip_ref.close()
+#    os.remove("/tmp/scipy.zip")
+#    os.remove("/tmp/numpy.zip")
+#    os.remove("/tmp/dill.zip")
+#    os.remove("/tmp/sklearn.zip")
 
 
     s3_record = event["Records"][0]["s3"]
@@ -51,7 +49,9 @@ def lambda_handler(event, context):
 
     for line in bodyList:
         line = line.rstrip()
-        da, utt = line.split('\t')
+        co = line.find(" ")
+        da = line[0:co-1]
+        utt = line[co+1:]
         words = []
         for line in mecab.parse(utt).splitlines():
             if line == "EOS":
@@ -74,17 +74,16 @@ def lambda_handler(event, context):
     svc = SVC(gamma="scale")
     svc.fit(X,Y)
 
-    # 学習されたモデル等一式を svc.modelに保存
-    with open("svc.model","wb") as f:
-        dill.dump(vectorizer, f)
-        dill.dump(label_encoder, f)
-        dill.dump(svc, f)
+    f = io.BytesIO()
+    dill.dump(vectorizer, f)
+    dill.dump(label_encoder, f)
+    dill.dump(svc, f)
+
 
     #アウトプット用のkey作成
-    count = inputKey.find("/")
-    output_keyName = "learn" + inputKey[count:]
+    output_keyName = "learn/svc.model"
 
     #S3に書き出し
     bucket = s3.Bucket(inputBucket)
-    with svc.model.open('rb') as f:
-        bucket.upload_fileobj(f, output_keyName)
+    bucket.upload_fileobj(f, output_keyName)
+        
