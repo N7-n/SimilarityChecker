@@ -22,17 +22,8 @@ sents = []
 labels = []
 
 def lambda_handler(event, context):
-#    zip_ref = zipfile.ZipFile('/tmp/scipy.zip', 'r')
-#   zip_ref = zipfile.ZipFile('/tmp/numpy.zip', 'r')
-#    zip_ref = zipfile.ZipFile('/tmp/dill.zip', 'r')
-#    zip_ref = zipfile.ZipFile('/tmp/sklearn.zip', 'r')
-#    zip_ref.extractall('/tmp')
-#    zip_ref.close()
-#    os.remove("/tmp/scipy.zip")
-#    os.remove("/tmp/numpy.zip")
-#    os.remove("/tmp/dill.zip")
-#    os.remove("/tmp/sklearn.zip")
-
+    mecab = MeCab.Tagger()
+    mecab.parse("")
 
     s3_record = event["Records"][0]["s3"]
     inputKey = s3_record["object"]["key"]
@@ -50,7 +41,7 @@ def lambda_handler(event, context):
     for line in bodyList:
         line = line.rstrip()
         co = line.find(" ")
-        da = line[0:co-1]
+        da = line[0:co]
         utt = line[co+1:]
         words = []
         for line in mecab.parse(utt).splitlines():
@@ -74,7 +65,7 @@ def lambda_handler(event, context):
     svc = SVC(gamma="scale")
     svc.fit(X,Y)
 
-    f = io.BytesIO()
+    f = open("/tmp/svm.model","wb")
     dill.dump(vectorizer, f)
     dill.dump(label_encoder, f)
     dill.dump(svc, f)
@@ -84,6 +75,7 @@ def lambda_handler(event, context):
     output_keyName = "learn/svc.model"
 
     #S3に書き出し
-    bucket = s3.Bucket(inputBucket)
-    bucket.upload_fileobj(f, output_keyName)
+    with open("/tmp/svm.model","b") as f:
+        bucket = s3.Bucket(inputBucket)
+        bucket.upload_fileobj(f, output_keyName)
         
