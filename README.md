@@ -6,3 +6,4 @@
   * S3
 * serverless Framework
 * docker
+w
