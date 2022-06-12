@@ -18,7 +18,7 @@ def lambda_handler(event, context):
     mecab.parse("")
 
     #s3からsvc.modelの取得
-    s3.Bucket("putlambdan7chat").download_file("text/svc.model", "/tmp/svc.model")
+    s3.Bucket("putlambdan7chat").download_file("learn/svc.model", "/tmp/svc.model")
     #テキストの取得
     text = event['body']
 

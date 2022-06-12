@@ -34,6 +34,6 @@ COPY ./requirement.txt /opt/
 RUN pip install --upgrade pip && pip install -r /opt/requirement.txt
 
 WORKDIR /var/task
-COPY lex.py .
+COPY chat.py .
 
-CMD ["lex.lambda_handler"]
+CMD ["chat.lambda_handler"]
