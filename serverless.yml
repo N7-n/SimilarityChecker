@@ -23,6 +23,9 @@ functions:
           rules:
             - prefix: text/
             - suffix: .txt
-  lex:
-    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7chatlex@sha256:204dc35d4e3188894bbd2ef2b308ba60ced92903fd72efa7f49a450473a6db8f
-    
+  chat:
+    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7chatchat@sha256:a11f5060f583c827792d93b1190ca38be22d28145906ce998605269aadf067d1
+    events:
+      - http:  	
+          path: posts/create
+          method: post
