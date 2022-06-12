@@ -10,6 +10,7 @@ import io
 from sklearn.svm import SVC
 from sklearn.preprocessing import LabelEncoder
 from sklearn.feature_extraction.text import TfidfVectorizer 
+import time
 
 
 s3 = boto3.resource("s3")
@@ -65,17 +66,18 @@ def lambda_handler(event, context):
     svc = SVC(gamma="scale")
     svc.fit(X,Y)
 
-    f = open("/tmp/svm.model","wb")
+    f = open("/tmp/vector.dill","wb")
     dill.dump(vectorizer, f)
     dill.dump(label_encoder, f)
     dill.dump(svc, f)
 
 
+    time.sleep(1)
     #アウトプット用のkey作成
-    output_keyName = "learn/svc.model"
+    output_keyName = "vector.dill"
 
     #S3に書き出し
-    with open("/tmp/svm.model","rb") as f:
+    with open("/tmp/vector.dill","rb") as f:
         bucket = s3.Bucket(inputBucket)
         bucket.upload_fileobj(f, output_keyName)
         
