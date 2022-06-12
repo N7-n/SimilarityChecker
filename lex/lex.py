@@ -2,7 +2,6 @@ import json
 import boto3
 import MeCab
 import dill
-import zipfile
 import os
 from pprint import pprint
 import sys
@@ -13,50 +12,38 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 s3 = boto3.resource("s3")
-
 def lambda_handler(event, context):
+    #mecab初期化
     mecab = MeCab.Tagger()
     mecab.parse("")
 
+    #s3からsvc.modelの取得
+    s3.Bucket("putlambdan7chat").download_file("text/svc.model", "/tmp/svc.model")
+    #テキストの取得
+    text = event['body']
 
-    for line in bodyList:
-        line = line.rstrip()
-        co = line.find(" ")
-        da = line[0:co]
-        utt = line[co+1:]
-        words = []
-        for line in mecab.parse(utt).splitlines():
-            if line == "EOS":
-                break
-            else:
-                word, feature_str = line.split("\t")
-                words.append(word)
-        sents.append(" ".join(words))
-        labels.append(da)
+    with open("/tmp/svc.model","rb") as f:
+        vectorizer = dill.load(f)
+        label_encoder = dill.load(f)
+        svc = dill.load(f)
 
-    # TfidfVectorizerを用いて，各文をベクトルに変換
-    vectorizer = TfidfVectorizer(tokenizer=lambda x:x.split(), ngram_range=(1,3))
-    X = vectorizer.fit_transform(sents)
+    da =  decide_da(text)
+    return {
+        "body": da
+    }
 
-    #    LabelEncoderを用いて，ラベルを数値に変換
-    label_encoder = LabelEncoder()
-    Y = label_encoder.fit_transform(labels)
+def decide_da(utt):
+    words = []
+    for line in mecab.parse(utt).splitlines():
+        if line == "EOS":
+            break
+        else:
+            word, feature_str = line.split("\t")
+            words.append(word)
+    str = " ".join(words)
+    X = vectorizer.transform([str])
+    Y = svc.predict(X)
 
-    # SVMでベクトルからラベルを取得するモデルを学習
-    svc = SVC(gamma="scale")
-    svc.fit(X,Y)
+    da = labal_encoder.inverse_transform(Y)[0]
 
-    f = open("/tmp/svm.model","wb")
-    dill.dump(vectorizer, f)
-    dill.dump(label_encoder, f)
-    dill.dump(svc, f)
-
-
-    #アウトプット用のkey作成
-    output_keyName = "learn/svc.model"
-
-    #S3に書き出し
-    with open("/tmp/svm.model","rb") as f:
-        bucket = s3.Bucket(inputBucket)
-        bucket.upload_fileobj(f, output_keyName)
-        
+    return da

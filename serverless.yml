@@ -24,5 +24,5 @@ functions:
             - prefix: text/
             - suffix: .txt
   lex:
-    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7chat@sha256:51c0b69052570c1cf5464c9e592cb9d8d31c36209ed0b08b3263ca30dc7e6564
+    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7chat@sha256:204dc35d4e3188894bbd2ef2b308ba60ced92903fd72efa7f49a450473a6db8f
     
