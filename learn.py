@@ -75,7 +75,7 @@ def lambda_handler(event, context):
     output_keyName = "learn/svc.model"
 
     #S3に書き出し
-    with open("/tmp/svm.model","b") as f:
+    with open("/tmp/svm.model","rb") as f:
         bucket = s3.Bucket(inputBucket)
         bucket.upload_fileobj(f, output_keyName)
         

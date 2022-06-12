@@ -14,8 +14,8 @@ provider:
         - "*"
 
 functions:
-  parse:
-    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7chat@sha256:9b6065fdc7ae1a35620e41005f307f22b3b0b08be4a30f2c124189f63c4daf4e
+  learn:
+    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7chat@sha256:51c0b69052570c1cf5464c9e592cb9d8d31c36209ed0b08b3263ca30dc7e6564
     events:
       - s3:
           bucket: putlambdan7chat
@@ -23,3 +23,6 @@ functions:
           rules:
             - prefix: text/
             - suffix: .txt
+  lex:
+    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7chat@sha256:51c0b69052570c1cf5464c9e592cb9d8d31c36209ed0b08b3263ca30dc7e6564
+    
