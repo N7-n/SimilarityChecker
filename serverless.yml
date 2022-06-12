@@ -15,16 +15,7 @@ provider:
 
 functions:
   learn:
-    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7chat@sha256:238d9583e3ed8667f2793219d80a3871a5320137fd7cf2ee2e0e6d3f861005a6
-    events:
-      - s3:
-          bucket: putlambdan7chat
-          event: s3:ObjectCreated:*
-          rules:
-            - prefix: text/
-            - suffix: .txt
-  chat:
-    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7chatchat@sha256:2179fdf501b13f0251a16d15ef5af3c0cc10bbf1288ef6729e9babdae90f2b6d 
+    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7chat@sha256:610d3c681af6b97c81eebc17c3c48cb9c30d66986560a0ee18fd00f874270c4c
     events:
       - http:  	
           path: posts/create

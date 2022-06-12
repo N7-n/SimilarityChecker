@@ -26,9 +26,10 @@ def lambda_handler(event, context):
     mecab = MeCab.Tagger()
     mecab.parse("")
 
-    s3_record = event["Records"][0]["s3"]
-    inputKey = s3_record["object"]["key"]
-    inputBucket = s3_record["bucket"]["name"]
+    inputKey = "text/learn.txt"
+    inputBucket = "n7chatdata"
+
+    text = event['body']
 
     object = s3.Object(inputBucket, inputKey)
     body = object.get()["Body"].read()
@@ -66,18 +67,19 @@ def lambda_handler(event, context):
     svc = SVC(gamma="scale")
     svc.fit(X,Y)
 
-    f = open("/tmp/vector.dill","wb")
-    dill.dump(vectorizer, f)
-    dill.dump(label_encoder, f)
-    dill.dump(svc, f)
+    words = []
+    for line in mecab.parse(text).splitlines():
+        if line == "EOS":
+            break
+        else:
+            word, feature_str = line.split("\t")
+            words.append(word)
+    str = " ".join(words)
+    X = vectorizer.transform([str])
+    Y = svc.predict(X)
 
+    da = label_encoder.inverse_transform(Y)[0]
 
-    time.sleep(1)
-    #アウトプット用のkey作成
-    output_keyName = "vector.dill"
-
-    #S3に書き出し
-    with open("/tmp/vector.dill","rb") as f:
-        bucket = s3.Bucket(inputBucket)
-        bucket.upload_fileobj(f, output_keyName)
-        
+    return {
+        "body": da
+    }
