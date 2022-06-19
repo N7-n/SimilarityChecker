@@ -1,16 +1,10 @@
-import json
 import boto3
 import MeCab
 import dill
-import zipfile
-import os
 from pprint import pprint
-import sys
-import io
 from sklearn.svm import SVC
 from sklearn.preprocessing import LabelEncoder
 from sklearn.feature_extraction.text import TfidfVectorizer 
-import time
 
 
 s3 = boto3.resource("s3")
@@ -34,11 +28,8 @@ def lambda_handler(event, context):
     object = s3.Object(inputBucket, inputKey)
     body = object.get()["Body"].read()
 
-    #デコード
     body = body.decode()
-
     bodyList = body.splitlines()
-
 
     for line in bodyList:
         line = line.rstrip()
@@ -55,15 +46,12 @@ def lambda_handler(event, context):
         sents.append(" ".join(words))
         labels.append(da)
 
-    # TfidfVectorizerを用いて，各文をベクトルに変換
     vectorizer = TfidfVectorizer(tokenizer=lambda x:x.split(), ngram_range=(1,3))
     X = vectorizer.fit_transform(sents)
 
-    #    LabelEncoderを用いて，ラベルを数値に変換
     label_encoder = LabelEncoder()
     Y = label_encoder.fit_transform(labels)
 
-    # SVMでベクトルからラベルを取得するモデルを学習
     svc = SVC(gamma="scale")
     svc.fit(X,Y)
 
@@ -79,7 +67,6 @@ def lambda_handler(event, context):
     Y = svc.predict(X)
 
     da = label_encoder.inverse_transform(Y)[0]
-
     return {
         "body": da
     }
