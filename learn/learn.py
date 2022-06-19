@@ -1,6 +1,5 @@
 import boto3
 import MeCab
-import dill
 from pprint import pprint
 from sklearn.svm import SVC
 from sklearn.preprocessing import LabelEncoder
