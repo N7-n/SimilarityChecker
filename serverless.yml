@@ -15,13 +15,7 @@ provider:
 
 functions:
   learn:
-    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7chat@sha256:610d3c681af6b97c81eebc17c3c48cb9c30d66986560a0ee18fd00f874270c4c
-    events:
-      - http:  	
-          path: posts/create
-          method: post
-  linebot:
-    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7line@sha256:171d6165d1c162046507dc7df863db84c8be8db2feb027fe54316ea89d658575
+    image: 132681501358.dkr.ecr.ap-northeast-1.amazonaws.com/n7chat@sha256:4c1554afbeed7f6ded9a26549a82558b92836ae37f854f340f4e4487b78ebf28
     events:
       - http:  	
           path: posts/create
