@@ -34,7 +34,7 @@ Q&Aのチャットにてパターン化した問いを判別する事が簡単�
 LINEでの利用例です(下記QRから友達登録することで利用可能です)<br><br>
 <img width="200" alt="スクリーンショット 2022-06-22 23 15 35" src="https://user-images.githubusercontent.com/84945656/175055590-d1542c96-06b9-4279-ad6c-40e3388b9165.png">
 
-元データ<br>
+- #### 元データ<br>
 mail メールが届きません<br>
 mail メールが届かない<br>
 pass パスワードを忘れた<br>
