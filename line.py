@@ -24,9 +24,15 @@ def lambda_handler(event, context):
         Payload=Payload
     )
 
-
     data = json.loads(response['Payload'].read())["body"]
     
+    if data == "mail":
+        result = "迷惑メールフォルダを確認してください"
+    elif data == "account":
+        result = "アカウントはこちらから作成できますURL(仮)"
+    elif data == "pass":
+        result = "パスワードはこちらで再設定できますURL(仮)"
+        
     url = 'https://api.line.me/v2/bot/message/reply'
     headers = {
         'Content-Type': 'application/json',
@@ -37,7 +43,7 @@ def lambda_handler(event, context):
         'messages': [
             {
                 "type": "text",
-                "text": data,
+                "text": result,
             }
         ]
     }
