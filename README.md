@@ -20,7 +20,7 @@ S3に配置された文章と対応するタグを書いたテキストファイ
 |  learn/learn.py  | SimilarityChecker。lambda内で動かす  |
 |  line.py  |  SimilarityCheckerをLINEで利用できるように。  |
 |  serverless.yml  |  AWSの構成や設定などの記述。 |
-|  test.txt  |  元データのサンプル。S3に配置する。 |
+|  test.txt  |  元データのサンプル。S3に配置する。実際に運用するときはここを適切に変える |
 
 
 # 制作理由など
