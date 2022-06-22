@@ -40,4 +40,7 @@ mail メールが届かない<br>
 pass パスワードを忘れた<br>
 pass　サインインできない <br>
 account アカウントを作成したい<br>
-account アカウントはどこで作成できる？<br>
+account アカウントはどこで作成できる？<br><br><br>
+![IMG_6887](https://user-images.githubusercontent.com/84945656/175068004-40ee9c6d-e8cb-4373-8640-2c238956743d.jpg)
+
+
