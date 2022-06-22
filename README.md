@@ -13,6 +13,16 @@ S3に配置された文章と対応するタグを書いたテキストファイ
 * serverless Framework
 * docker
 
+# フォルダ構成
+|  名前  |  内容  |
+| ---- | ---- |
+|  learn/Dockerfile  | SimilarityCheckerの環境  |
+|  learn/learn.py  | SimilarityChecker。lambda内で動かす  |
+|  line.py  |  SimilarityCheckerをLINEで利用できるように。  |
+|  serverless.yml  |  AWSの構成や設定などの記述。 |
+|  test.txt  |  元データのサンプル。S3に配置する。 |
+
+
 # 制作理由など
 - #### Q&Aチャットにおいてパターン化した問いを判別する事ができます。<br>
 Q&Aのチャットにてパターン化した問いを判別する事が簡単です。
